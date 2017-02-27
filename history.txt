@@ -1,0 +1,4 @@
+07.02.2017
+*************************
+- create REST spring boot App
+- NewGameController creates and returns gameId
