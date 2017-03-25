@@ -1,3 +1,10 @@
+25.03.2017
+*************************
+- GameStatus class added to hold game info (not completed)
+- DatabaseClass class added as DB
+- NewGameController class updated to process "game/new?first={player1}&second={player2}" (not completed)
+- GameStatusController class added to process "game/status?gameId={id}" (not completed)
+
 07.02.2017
 *************************
 - create REST spring boot App
