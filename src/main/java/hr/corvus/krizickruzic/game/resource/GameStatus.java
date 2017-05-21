@@ -2,7 +2,6 @@ package hr.corvus.krizickruzic.game.resource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class GameStatus {
 	
@@ -10,7 +9,6 @@ public class GameStatus {
 	private String firstPlayer;
 	private String secondPlayer;
 	private String status;
-	//private List<Map<String, String>> game = new ArrayList<>();
 	private List<PlayGame> game = new ArrayList<>();
 	
 	public GameStatus() {}
@@ -19,7 +17,9 @@ public class GameStatus {
 		this.gameId = gameId;
 		this.firstPlayer = firstPlayer;
 		this.secondPlayer = secondPlayer;
-		status = "inProgress";	
+		status = "inProgress";
+		
+		setRowAndColumnGame(game);
 	}
 
 	public Long getGameId() {
@@ -42,19 +42,13 @@ public class GameStatus {
 		return game;
 	}
 
-	public void setGame(List<PlayGame> game) {
-		this.game = game;
+	private void setRowAndColumnGame(List<PlayGame> game) {
+		for (int j = 1; j <= 3; j++) {
+			for (int i = 1; i <= 3; i++) {
+				game.add(new PlayGame(j, i, ""));
+			}
+		}
 	}
-	
-
-	/*public List<Map<String, String>> getGame() {
-		return game;
-	}
-
-	public void setGame(List<Map<String, String>> game) {
-		this.game = game;
-	}*/
-
 
 	
 }

@@ -1,6 +1,5 @@
 package hr.corvus.krizickruzic.game.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,15 +22,13 @@ public class PlayController {
 	public void play(@RequestParam(value="gameId") Long gameId, @RequestParam(value="row") int row, @RequestParam(value="column") int column) {
 		
 		GameStatus status = gameStatus.get(gameId);
-		/*List<Map<String, String>> gameList = status.getGame();
-		Map<String, String> game =  new HashMap<>();
-		game.put("row", row);
-		game.put("column", column);
-		game.put("value", "X");
 		
-		gameList.add(game);*/
+		List<PlayGame> game = status.getGame();
+		// dummy example
+		PlayGame playGame = game.get(0);
+		playGame.setValue("X");
 		
-		List<PlayGame> gameList = status.getGame();
-		gameList.add(new PlayGame(row, column, "X"));
+		game.set(0, playGame);
+		
 	}
 }
