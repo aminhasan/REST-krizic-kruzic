@@ -3,6 +3,9 @@ package hr.corvus.krizickruzic.game.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 public class GameStatus {
 	
 	private Long gameId;
@@ -10,6 +13,9 @@ public class GameStatus {
 	private String secondPlayer;
 	private String status;
 	private List<PlayGame> game = new ArrayList<>();
+	
+	@JsonIgnore
+	private ArrayList<Integer> computerMoves = new ArrayList<Integer>();
 	
 	public GameStatus() {}
 	
@@ -20,6 +26,7 @@ public class GameStatus {
 		status = "inProgress";
 		
 		setRowAndColumnGame(game);
+		setComputerMoves(computerMoves);
 	}
 
 	public Long getGameId() {
@@ -42,6 +49,10 @@ public class GameStatus {
 		return game;
 	}
 
+	public ArrayList<Integer> getComputerMoves() {
+		return computerMoves;
+	}
+
 	private void setRowAndColumnGame(List<PlayGame> game) {
 		for (int j = 1; j <= 3; j++) {
 			for (int i = 1; i <= 3; i++) {
@@ -49,6 +60,10 @@ public class GameStatus {
 			}
 		}
 	}
-
 	
+	private void setComputerMoves(ArrayList<Integer> computerMoves) {
+		for (int i = 0; i < 9; i++) {
+			computerMoves.add(i);
+		}
+	}
 }
