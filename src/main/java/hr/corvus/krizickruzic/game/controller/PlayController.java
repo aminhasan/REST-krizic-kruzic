@@ -1,5 +1,7 @@
 package hr.corvus.krizickruzic.game.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hr.corvus.krizickruzic.game.database.DatabaseClass;
 import hr.corvus.krizickruzic.game.resource.GameStatus;
 import hr.corvus.krizickruzic.game.resource.PlayGame;
+import hr.corvus.krizickruzic.game.util.Computer;
 
 @RestController
 @RequestMapping("/game")
@@ -29,6 +32,8 @@ public class PlayController {
 		playGame.setValue("X");
 		
 		game.set(0, playGame);
+		
+		Computer.play(status);
 		
 	}
 }

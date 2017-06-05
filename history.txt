@@ -1,3 +1,8 @@
+05.06.2017
+*************************
+- Created Computer utility class: play method
+- PlayController: call play method 
+
 22.05.2017
 *************************
 - GameStatus: set computer possible moves
