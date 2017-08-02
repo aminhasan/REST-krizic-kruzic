@@ -1,3 +1,8 @@
+02.08.2017
+*************************
+- handle exception
+- application.properties file added
+
 05.06.2017
 *************************
 - Created Computer utility class: play method
