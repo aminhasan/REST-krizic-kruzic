@@ -1,8 +1,13 @@
 package hr.corvus.krizickruzic.game.controller;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,11 +26,19 @@ public class NewGameController {
 	
 	@RequestMapping(value="/new", method=RequestMethod.GET)
 	public NewGame newGame(@RequestParam(value="first") String firstPlayer, @RequestParam(value="second") String secondPlayer) {
-		
+	
+		if (firstPlayer.isEmpty() || secondPlayer.isEmpty()) {
+			throw new IllegalArgumentException("Please check your parameters");
+		}
 		
 		long gameId = counter.incrementAndGet();
 		gameStatus.put(gameId, new GameStatus(gameId, firstPlayer, secondPlayer));
 		
 		return new NewGame(gameId);
+	}
+	
+	@ExceptionHandler
+	void handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
+		response.sendError(HttpStatus.PRECONDITION_FAILED.value());
 	}
 }
