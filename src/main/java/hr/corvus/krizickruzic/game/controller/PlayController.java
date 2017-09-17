@@ -14,38 +14,46 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hr.corvus.krizickruzic.game.database.DatabaseClass;
+import hr.corvus.krizickruzic.game.enums.CellValue;
 import hr.corvus.krizickruzic.game.resource.GameStatus;
 import hr.corvus.krizickruzic.game.resource.PlayGame;
 import hr.corvus.krizickruzic.game.util.Computer;
+import hr.corvus.krizickruzic.game.util.GameUtils;
 
 @RestController
 @RequestMapping("/game")
 public class PlayController {
 	
+	final static String CELL_VALUE = CellValue.X.toString();
+	
 	private Map<Long, GameStatus> gameStatus = DatabaseClass.getGameStatus();
 
 	@RequestMapping(value="/play", method=RequestMethod.GET)
-	public void play(@RequestParam(value="gameId") Long gameId, @RequestParam(value="row") int row, @RequestParam(value="column") int column) {
-		
-		if (gameId == null || row == 0 || column == 0) {
-			throw new IllegalArgumentException("Please check your parameters!");
-		}
+	public String play(@RequestParam(value="gameId") Long gameId, @RequestParam(value="row") int row, @RequestParam(value="column") int column) {
 		
 		GameStatus status = gameStatus.get(gameId);
 		
+		if (! GameUtils.checkPlayParams(status, row, column))
+				throw new IllegalArgumentException("Please check your parameters!");	
+		
+		// indices 0-8 represents cell position 1-9 
 		List<PlayGame> game = status.getGame();
-		// dummy example
-		PlayGame playGame = game.get(0);
-		playGame.setValue("X");
+		int cellPosition = GameUtils.getCellPosition(row, column);
 		
-		game.set(0, playGame);
+		PlayGame playGame = game.get(cellPosition);
+		playGame.setValue(CELL_VALUE);
 		
+		game.set(cellPosition, playGame);
+		
+		Computer.removeUsedCellPoistion(status, cellPosition);
 		Computer.play(status);
 		
+		return "Successfully played. please check the game status at endpoint /game/status";
 	}
 	
 	@ExceptionHandler
 	void handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
 		response.sendError(HttpStatus.PRECONDITION_FAILED.value());
 	}
+	
 }

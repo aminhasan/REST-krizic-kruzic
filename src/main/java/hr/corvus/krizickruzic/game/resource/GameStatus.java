@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hr.corvus.krizickruzic.game.enums.Status;
+
 
 public class GameStatus {
 	
@@ -23,7 +25,7 @@ public class GameStatus {
 		this.gameId = gameId;
 		this.firstPlayer = firstPlayer;
 		this.secondPlayer = secondPlayer;
-		status = "inProgress";
+		status = Status.inProgress.toString();
 		
 		setRowAndColumnGame(game);
 		setComputerMoves(computerMoves);

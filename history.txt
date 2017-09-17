@@ -1,3 +1,18 @@
+17.09.2017
+*************************
+- GameStatusController: handle exception for gameId parameter
+- PlayController:
+	- play implementation (still need to implement who will be the winner)
+	- handle exception for play parameters
+	- String return type, instead of void
+- GameStatus: status value is set to Enum type
+- Computer: removeUsedCellPoistion function added
+- GameUtils class added
+- Enums type added:
+	- CellValue
+	- Status
+	- Strategy
+
 02.08.2017
 *************************
 - handle exception
