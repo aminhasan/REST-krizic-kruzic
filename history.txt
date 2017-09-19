@@ -1,3 +1,14 @@
+19.09.2017
+*************************
+- GameUtils:
+	- checkPlayParams updated
+	- isPlayerWin method is added
+	- isComputerWin method is added
+- Computer: removeUsedCellPoistion function is fixed
+- GameStatus: winner attribute added
+- NewGameController: condition who will play first
+- PlayController: additional conditions & TODO notes are added
+
 17.09.2017
 *************************
 - GameStatusController: handle exception for gameId parameter

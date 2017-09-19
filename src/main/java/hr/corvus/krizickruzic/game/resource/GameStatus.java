@@ -14,6 +14,7 @@ public class GameStatus {
 	private String firstPlayer;
 	private String secondPlayer;
 	private String status;
+	private String winner;
 	private List<PlayGame> game = new ArrayList<>();
 	
 	@JsonIgnore
@@ -43,8 +44,24 @@ public class GameStatus {
 		return secondPlayer;
 	}
 	
+	public void setSecondPlayer(String secondPlayer) {
+		this.secondPlayer = secondPlayer;
+	}
+
 	public String getStatus() {
 		return status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getWinner() {
+		return winner;
+	}
+
+	public void setWinner(String winner) {
+		this.winner = winner;
 	}
 
 	public List<PlayGame> getGame() {

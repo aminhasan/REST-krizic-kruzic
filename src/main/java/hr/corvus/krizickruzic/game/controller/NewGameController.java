@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hr.corvus.krizickruzic.game.database.DatabaseClass;
 import hr.corvus.krizickruzic.game.resource.GameStatus;
 import hr.corvus.krizickruzic.game.resource.NewGame;
+import hr.corvus.krizickruzic.game.util.Computer;
 
 @RestController
 @RequestMapping("/game")
@@ -33,6 +34,18 @@ public class NewGameController {
 		
 		long gameId = counter.incrementAndGet();
 		gameStatus.put(gameId, new GameStatus(gameId, firstPlayer, secondPlayer));
+		
+		GameStatus status = gameStatus.get(gameId);
+		
+		// set secondPlayer value to computer for convenient
+		if (firstPlayer.equalsIgnoreCase(secondPlayer)) {
+			status.setSecondPlayer("computer");
+		}
+		
+		// computer plays first
+		if (firstPlayer.toLowerCase().equals("computer")) {
+			Computer.play(status);
+		}
 		
 		return new NewGame(gameId);
 	}

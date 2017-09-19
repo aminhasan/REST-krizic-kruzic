@@ -27,7 +27,18 @@ public class Computer {
 	
 	
 	public static void removeUsedCellPoistion(GameStatus gameStatus, int cellPosition) {
+		
+		int index = 0;
 		ArrayList<Integer> computerMoves = gameStatus.getComputerMoves();
-		computerMoves.remove(cellPosition);
+		
+		for (Integer move : computerMoves) {
+			
+			if (move.intValue() == cellPosition) {
+				computerMoves.remove(index);
+				break;
+			}
+			
+			index++;
+		}
 	}
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hr.corvus.krizickruzic.game.database.DatabaseClass;
 import hr.corvus.krizickruzic.game.enums.CellValue;
+import hr.corvus.krizickruzic.game.enums.Status;
 import hr.corvus.krizickruzic.game.resource.GameStatus;
 import hr.corvus.krizickruzic.game.resource.PlayGame;
 import hr.corvus.krizickruzic.game.util.Computer;
@@ -25,6 +26,7 @@ import hr.corvus.krizickruzic.game.util.GameUtils;
 public class PlayController {
 	
 	final static String CELL_VALUE = CellValue.X.toString();
+	final static String NAME = "computer";
 	
 	private Map<Long, GameStatus> gameStatus = DatabaseClass.getGameStatus();
 
@@ -45,8 +47,23 @@ public class PlayController {
 		
 		game.set(cellPosition, playGame);
 		
+		// check if player win
+		if (GameUtils.isPlayerWin(game)) {
+			status.setWinner(status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer());
+			status.setStatus(Status.finished.toString());
+			// TODO: insert into GameStats db class
+		}
+		
+		// TODO: check if game still inProgress
 		Computer.removeUsedCellPoistion(status, cellPosition);
 		Computer.play(status);
+		
+		// check if computer win
+		if (GameUtils.isComputerWin(game)) {
+			status.setWinner(NAME);
+			status.setStatus(Status.finished.toString());
+			// TODO: insert into GameStats db class
+		}
 		
 		return "Successfully played. please check the game status at endpoint /game/status";
 	}
