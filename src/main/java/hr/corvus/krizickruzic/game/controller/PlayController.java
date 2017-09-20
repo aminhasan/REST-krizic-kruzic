@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hr.corvus.krizickruzic.game.database.DatabaseClass;
 import hr.corvus.krizickruzic.game.enums.CellValue;
+import hr.corvus.krizickruzic.game.enums.Result;
 import hr.corvus.krizickruzic.game.enums.Status;
 import hr.corvus.krizickruzic.game.resource.GameStatus;
 import hr.corvus.krizickruzic.game.resource.PlayGame;
@@ -46,23 +47,34 @@ public class PlayController {
 		playGame.setValue(CELL_VALUE);
 		
 		game.set(cellPosition, playGame);
+		Computer.removeUsedCellPoistion(status, cellPosition);
 		
-		// check if player win
 		if (GameUtils.isPlayerWin(game)) {
-			status.setWinner(status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer());
+			String name = status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer();
+			status.setWinner(name);
 			status.setStatus(Status.finished.toString());
-			// TODO: insert into GameStats db class
+			
+			GameUtils.setGameStats(name, Result.WIN);
 		}
 		
-		// TODO: check if game still inProgress
-		Computer.removeUsedCellPoistion(status, cellPosition);
-		Computer.play(status);
+		if (status.getStatus().equals(Status.inProgress.toString()) && (! GameUtils.isAllMovesUsed(status)) )
+			Computer.play(status);
 		
-		// check if computer win
 		if (GameUtils.isComputerWin(game)) {
 			status.setWinner(NAME);
 			status.setStatus(Status.finished.toString());
-			// TODO: insert into GameStats db class
+			
+			String name = status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer();
+			GameUtils.setGameStats(name, Result.LOSS);
+		}
+		
+		// set draw in case no one wins
+		if ( GameUtils.isAllMovesUsed(status) && (! GameUtils.isPlayerWin(game)) && (! GameUtils.isComputerWin(game)) ) {
+			
+			String name = status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer();
+			status.setStatus(Status.finished.toString());
+			
+			GameUtils.setGameStats(name, Result.DRAW);
 		}
 		
 		return "Successfully played. please check the game status at endpoint /game/status";

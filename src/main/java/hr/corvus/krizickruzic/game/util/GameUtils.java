@@ -2,10 +2,13 @@ package hr.corvus.krizickruzic.game.util;
 
 import java.util.List;
 
+import hr.corvus.krizickruzic.game.database.DatabaseClass;
 import hr.corvus.krizickruzic.game.enums.CellValue;
+import hr.corvus.krizickruzic.game.enums.Result;
 import hr.corvus.krizickruzic.game.enums.Status;
 import hr.corvus.krizickruzic.game.resource.GameStatus;
 import hr.corvus.krizickruzic.game.resource.PlayGame;
+import hr.corvus.krizickruzic.game.resource.Statistic;
 
 public class GameUtils {
 	
@@ -85,7 +88,7 @@ public class GameUtils {
 		if (game.get(3).getValue().equals(PLAYER_CELL_VALUE) && game.get(4).getValue().equals(PLAYER_CELL_VALUE) && game.get(5).getValue().equals(PLAYER_CELL_VALUE))
 			return true;
 		
-		if (game.get(6).getValue().equals(PLAYER_CELL_VALUE) && game.get(6).getValue().equals(PLAYER_CELL_VALUE) && game.get(8).getValue().equals(PLAYER_CELL_VALUE))
+		if (game.get(6).getValue().equals(PLAYER_CELL_VALUE) && game.get(7).getValue().equals(PLAYER_CELL_VALUE) && game.get(8).getValue().equals(PLAYER_CELL_VALUE))
 			return true;
 		
 		if (game.get(0).getValue().equals(PLAYER_CELL_VALUE) && game.get(3).getValue().equals(PLAYER_CELL_VALUE) && game.get(6).getValue().equals(PLAYER_CELL_VALUE))
@@ -114,7 +117,7 @@ public class GameUtils {
 		if (game.get(3).getValue().equals(COMPUTER_CELL_VALUE) && game.get(4).getValue().equals(COMPUTER_CELL_VALUE) && game.get(5).getValue().equals(COMPUTER_CELL_VALUE))
 			return true;
 		
-		if (game.get(6).getValue().equals(COMPUTER_CELL_VALUE) && game.get(6).getValue().equals(COMPUTER_CELL_VALUE) && game.get(8).getValue().equals(COMPUTER_CELL_VALUE))
+		if (game.get(6).getValue().equals(COMPUTER_CELL_VALUE) && game.get(7).getValue().equals(COMPUTER_CELL_VALUE) && game.get(8).getValue().equals(COMPUTER_CELL_VALUE))
 			return true;
 		
 		if (game.get(0).getValue().equals(COMPUTER_CELL_VALUE) && game.get(3).getValue().equals(COMPUTER_CELL_VALUE) && game.get(6).getValue().equals(COMPUTER_CELL_VALUE))
@@ -134,4 +137,39 @@ public class GameUtils {
 		
 		return false;
 	}
+	
+	public static boolean isAllMovesUsed(GameStatus gameStatus) {
+		
+		List<PlayGame> gameList = gameStatus.getGame();
+		
+		for (PlayGame game : gameList) {
+			if (game.getValue().isEmpty())
+				return false;
+		}
+		
+		return true;
+	}
+	
+	public static void setGameStats(String name, Result result) {
+		
+		switch(result) {
+		
+			case WIN:
+				DatabaseClass.getGameStats().getStats().add(new Statistic(name, 1 ,0 ,0));
+				break;
+				
+			case LOSS:
+				DatabaseClass.getGameStats().getStats().add(new Statistic(name, 0, 1, 0));
+				break;
+				
+			case DRAW:
+				DatabaseClass.getGameStats().getStats().add(new Statistic(name, 0, 0, 1));
+				break;
+		}
+		
+	}
 }
+
+
+
+

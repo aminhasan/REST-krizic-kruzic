@@ -1,3 +1,16 @@
+20.09.2017
+*************************
+- PlayController: implementation done
+- DatabaseClass: gameStats variable added
+- GameUtils:
+	- isPlayerWin & isComputerWin methods fixed
+	- isAllMovesUsed method added
+	- setGameStats method add (needs to finish) 
+- GameStatsController: to get game stats at endpoint "game/stats"
+- Result enum added
+- GameStats class added to hold game stats
+- Statistic class added
+
 19.09.2017
 *************************
 - GameUtils:
