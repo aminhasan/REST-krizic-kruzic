@@ -152,21 +152,74 @@ public class GameUtils {
 	
 	public static void setGameStats(String name, Result result) {
 		
+		int statsIndex = getIndexByNameFromStats(name);
+		
 		switch(result) {
 		
-			case WIN:
-				DatabaseClass.getGameStats().getStats().add(new Statistic(name, 1 ,0 ,0));
+			case WIN:			
+				if (statsIndex == -1)
+					DatabaseClass.getGameStats().getStats().add(new Statistic(name, 1 ,0 ,0));
+				else
+					updateStats(statsIndex, result);
+				
 				break;
 				
 			case LOSS:
-				DatabaseClass.getGameStats().getStats().add(new Statistic(name, 0, 1, 0));
+				if (statsIndex == -1)
+					DatabaseClass.getGameStats().getStats().add(new Statistic(name, 0, 1, 0));
+				else
+					updateStats(statsIndex, result);
+				
 				break;
 				
 			case DRAW:
-				DatabaseClass.getGameStats().getStats().add(new Statistic(name, 0, 0, 1));
+				if (statsIndex == -1)
+					DatabaseClass.getGameStats().getStats().add(new Statistic(name, 0, 0, 1));
+				else
+					updateStats(statsIndex, result);
+				
 				break;
 		}
 		
+	}
+	
+	private static int getIndexByNameFromStats(String name) {
+		
+		int index = 0;
+		List<Statistic> statistics = DatabaseClass.getGameStats().getStats();
+		
+		for (Statistic statistic : statistics) {
+			if (name.equalsIgnoreCase(statistic.getName())) {
+				return index;
+			}
+			index++;
+		}
+		
+		// not exist
+		return -1;
+	}
+	
+	private static void updateStats(int statsIndex, Result result) {
+		
+		Statistic statistic = DatabaseClass.getGameStats().getStats().get(statsIndex);
+		
+		switch(result) {
+		
+			case WIN:
+				statistic.setWins(statistic.getWins() + 1);
+				
+				break;
+				
+			case LOSS:
+				statistic.setLosses(statistic.getLosses() + 1);
+				
+				break;
+				
+			case DRAW:
+				statistic.setDraws(statistic.getDraws() + 1);
+				
+				break;
+		}
 	}
 }
 

@@ -44,40 +44,44 @@ public class PlayController {
 		int cellPosition = GameUtils.getCellPosition(row, column);
 		
 		PlayGame playGame = game.get(cellPosition);
+		// player makes the move
 		playGame.setValue(CELL_VALUE);
 		
 		game.set(cellPosition, playGame);
 		Computer.removeUsedCellPoistion(status, cellPosition);
 		
 		if (GameUtils.isPlayerWin(game)) {
-			String name = status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer();
-			status.setWinner(name);
+			
+			status.setWinner(getName(status));
 			status.setStatus(Status.finished.toString());
 			
-			GameUtils.setGameStats(name, Result.WIN);
+			GameUtils.setGameStats(getName(status), Result.WIN);
 		}
 		
 		if (status.getStatus().equals(Status.inProgress.toString()) && (! GameUtils.isAllMovesUsed(status)) )
 			Computer.play(status);
 		
 		if (GameUtils.isComputerWin(game)) {
+			
 			status.setWinner(NAME);
 			status.setStatus(Status.finished.toString());
 			
-			String name = status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer();
-			GameUtils.setGameStats(name, Result.LOSS);
+			GameUtils.setGameStats(getName(status), Result.LOSS);
 		}
 		
 		// set draw in case no one wins
 		if ( GameUtils.isAllMovesUsed(status) && (! GameUtils.isPlayerWin(game)) && (! GameUtils.isComputerWin(game)) ) {
 			
-			String name = status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer();
 			status.setStatus(Status.finished.toString());
 			
-			GameUtils.setGameStats(name, Result.DRAW);
+			GameUtils.setGameStats(getName(status), Result.DRAW);
 		}
 		
 		return "Successfully played. please check the game status at endpoint /game/status";
+	}
+	
+	private String getName(GameStatus status) {
+		return status.getFirstPlayer().equalsIgnoreCase(NAME) ? status.getSecondPlayer() : status.getFirstPlayer();
 	}
 	
 	@ExceptionHandler

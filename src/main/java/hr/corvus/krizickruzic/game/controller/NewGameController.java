@@ -43,7 +43,7 @@ public class NewGameController {
 		}
 		
 		// computer plays first
-		if (firstPlayer.toLowerCase().equals("computer")) {
+		if (firstPlayer.equalsIgnoreCase("computer")) {
 			Computer.play(status);
 		}
 		
