@@ -6,6 +6,7 @@ import hr.corvus.krizickruzic.game.database.DatabaseClass;
 import hr.corvus.krizickruzic.game.enums.CellValue;
 import hr.corvus.krizickruzic.game.enums.Result;
 import hr.corvus.krizickruzic.game.enums.Status;
+import hr.corvus.krizickruzic.game.enums.Strategy;
 import hr.corvus.krizickruzic.game.resource.GameStatus;
 import hr.corvus.krizickruzic.game.resource.PlayGame;
 import hr.corvus.krizickruzic.game.resource.Statistic;
@@ -158,7 +159,7 @@ public class GameUtils {
 		
 			case WIN:			
 				if (statsIndex == -1)
-					DatabaseClass.getGameStats().getStats().add(new Statistic(name, 1 ,0 ,0));
+					DatabaseClass.getGameStats().getStats().add(new Statistic(name, 1, 0, 0));
 				else
 					updateStats(statsIndex, result);
 				
@@ -181,6 +182,23 @@ public class GameUtils {
 				break;
 		}
 		
+	}
+	
+	public static Strategy getGameStrategy(String name) {
+		
+		int index = getIndexByNameFromStats(name);
+		if (index == -1)
+			return Strategy.WEAK;
+		
+		Statistic statistic = DatabaseClass.getGameStats().getStats().get(index);
+		
+		int totalPlays = statistic.getWins() + statistic.getLosses() + statistic.getDraws();
+		int winPercent = (int) (((double) statistic.getWins() / totalPlays) * 100);
+		
+		if (winPercent <= 30)
+			return Strategy.WEAK;
+		else
+			return Strategy.STRONG;
 	}
 	
 	private static int getIndexByNameFromStats(String name) {
